@@ -5,9 +5,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
   return {
     plugins: [react()],
-    define: {
-      // Pass the API_KEY from Railway environment variables to the frontend code
-      'process.env.API_KEY': JSON.stringify(env.API_KEY) 
+    server: {
+      proxy: {
+        '/api': 'http://localhost:3002'
+      }
     },
     build: {
       outDir: 'dist'

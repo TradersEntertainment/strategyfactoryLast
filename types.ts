@@ -22,7 +22,7 @@ export interface Candle {
 }
 
 export interface StrategyCondition {
-  indicator: 'RSI' | 'SMA_CROSS' | 'PRICE_LEVEL' | 'VOLATILITY';
+  indicator: 'RSI' | 'SMA_CROSS' | 'PRICE_LEVEL' | 'EMA_CROSS' | 'MACD' | 'BOLLINGER';
   params: { [key: string]: number };
   operator: '>' | '<' | 'crosses_above' | 'crosses_below';
   value: number; // threshold
@@ -39,7 +39,10 @@ export interface StrategyConfig {
   stopLossPct: number;
   takeProfitPct: number;
   riskPerTradePct: number;
+  riskParametersEnabled?: boolean; // Toggle for TP/SL
+  side: 'LONG' | 'SHORT'; // Strategy direction
   logicExplanation: string; // AI generated explanation
+  lookbackCandles?: number; // Last N candles to test
 }
 
 export interface Trade {
@@ -55,8 +58,11 @@ export interface Trade {
 
 export interface BacktestResult {
   totalTrades: number;
+  winTrades: number;
+  lossTrades: number;
   winRate: number;
   totalPnL: number;
+  profitFactor: number;
   maxDrawdown: number;
   sharpeRatio: number;
   equityCurve: { timestamp: number; equity: number }[];
